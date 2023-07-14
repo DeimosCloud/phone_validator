@@ -76,3 +76,47 @@ variable "microservice" {
   type        = string
   default     = ""
 }
+#-------------------------
+#   Database Variables
+#-------------------------
+variable "db_engine" {
+  description = "The database engine"
+  type        = string
+  default     = ""
+}
+
+variable "db_engine_version" {
+  description = "The running version of the database"
+  type        = string
+  default     = ""
+}
+
+variable "db_major_engine_version" {
+  description = "The optional version of the database"
+  type        = string
+  default     = ""
+}
+
+variable "db_family" {
+  description = "The family the database belongs to"
+  type        = string
+  default     = ""
+}
+
+variable "db_instance_class" {
+  description = "The instance class of database"
+  type        = string
+  default     = ""
+}
+
+variable "db_allocated_storage" {
+  description = "storage allocated to database"
+  type        = number
+  default     = null
+}
+
+variable "db_username" {
+  description = "username for the database"
+  type        = string
+  default     = ""
+}
