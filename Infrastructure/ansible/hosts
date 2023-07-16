@@ -1,5 +1,5 @@
 [load_balancer]
-load_balancer ansible_host=192.0.2.1 ansible_port=1337
+load_balancer ansible_host=10.10.4.29 ansible_port=1337 ansible_ssh_private_key_file=~/loadbalancer.pem
 
 [microservice]
-microservice ansible_host=192.0.2.2 ansible_port=1337
+microservice ansible_host=10.10.2.88 ansible_port=1337 ansible_ssh_private_key_file=~/microservice.pem

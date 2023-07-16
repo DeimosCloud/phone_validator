@@ -61,7 +61,7 @@ module "lb_security_group" {
   version = "~> 5.0"
 
   name        = var.load_balancer
-  description = "Complete PostgreSQL example security group"
+  description = "loadbalancer security group"
   vpc_id      = module.vpc.vpc_id
 
   # ingress
@@ -83,26 +83,18 @@ module "lb_security_group" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-     {
-      description = "Allow HTTPS"
-      rule        = "ssh-tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
   ]
 
-  # egress_with_cidr_blocks = [
-  #   {
-  #     description = "Deny all outgoing traffic"
-  #     from_port   = 0
-  #     to_port     = 0
-  #     protocol    = "-1"
-  #     cidr_blocks = "0.0.0.0/0"
-  #   },
+  egress_with_cidr_blocks = [
+    {
+      description = "Deny all outgoing traffic"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    },
 
-  # ]
-  egress_cidr_blocks = ["0.0.0.0/0"]
-  egress_rules       = ["all-all"]
-
+  ]
   tags = local.common_labels
 }
 
@@ -113,7 +105,7 @@ module "ms_security_group" {
   version = "~> 5.0"
 
   name        = var.microservice
-  description = "Complete PostgreSQL example security group"
+  description = "Complete microservice security group"
   vpc_id      = module.vpc.vpc_id
 
   # ingress
@@ -149,5 +141,55 @@ module "ms_security_group" {
 
   ]
 
+  tags = local.common_labels
+}
+
+#-------------------------
+#   Ansible master SG
+#-------------------------
+module "ansible_master_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
+
+  name        = var.ansible_master
+  description = "ansible master security group"
+  vpc_id      = module.vpc.vpc_id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      description = "Allow HTTPS"
+      rule        = "https-443-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      description = "Allow HTTPS"
+      rule        = "http-80-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      description = "Allow Port 1337"
+      from_port   = 1337
+      to_port     = 1337
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+     {
+      description = "Allow HTTPS"
+      rule        = "ssh-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      description = "Deny all outgoing traffic"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    },
+
+  ]
   tags = local.common_labels
 }

@@ -24,6 +24,9 @@ module "load_balancer" {
               sudo yum install nginx -y
               sudo service nginx start
               sudo chkconfig nginx on
+
+              sudo sed -i 's/#Port 22/Port 1337/' /etc/ssh/sshd_config
+              sudo service sshd restart
               EOF
 
 
@@ -58,6 +61,10 @@ module "microservice" {
               sudo service docker start
               sudo usermod -a -G docker ec2-user
               sudo chkconfig docker on
+
+            
+              sudo sed -i 's/#Port 22/Port 1337/' /etc/ssh/sshd_config
+              sudo service sshd restart
               EOF
 
   tags = merge (
@@ -79,7 +86,7 @@ module "ansible_master" {
   instance_type          = var.linux_instance_type
   key_name               = "ansible_master"
   monitoring             = true
-  vpc_security_group_ids = [module.lb_security_group.security_group_id]
+  vpc_security_group_ids = [module.ansible_master_security_group.security_group_id]
   subnet_id              = module.vpc.public_subnets[1]
   associate_public_ip_address = true
 
