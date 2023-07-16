@@ -76,6 +76,12 @@ variable "microservice" {
   type        = string
   default     = ""
 }
+
+variable "ansible_master" {
+  description = "name of the ansible_master server"
+  type        = string
+  default     = ""
+}
 #-------------------------
 #   Database Variables
 #-------------------------

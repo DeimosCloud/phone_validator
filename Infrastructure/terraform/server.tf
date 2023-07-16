@@ -13,7 +13,8 @@ module "load_balancer" {
   key_name               = "loadbalancer"
   monitoring             = true
   vpc_security_group_ids = [module.lb_security_group.security_group_id]
-  subnet_id              = module.vpc.private_subnets[0]
+  subnet_id              = module.vpc.public_subnets[0]
+  associate_public_ip_address = true
 
   iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
 
@@ -63,6 +64,38 @@ module "microservice" {
     local.common_labels,
     {
       Name = "microservice"
+    }
+  )
+}
+
+
+module "ansible_master" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = var.ansible_master
+
+  ami                    = var.linux_ami
+  instance_type          = var.linux_instance_type
+  key_name               = "ansible_master"
+  monitoring             = true
+  vpc_security_group_ids = [module.lb_security_group.security_group_id]
+  subnet_id              = module.vpc.public_subnets[1]
+  associate_public_ip_address = true
+
+  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo yum update -y
+              sudo yum install python3-pip -y
+              python3 -m pip install 
+              EOF
+
+  tags = merge (
+    local.common_labels,
+    {
+      Name = "master-node"
     }
   )
 }

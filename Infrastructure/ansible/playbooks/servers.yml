@@ -1,0 +1,18 @@
+- hosts: load_balancer
+  become: yes
+  roles:
+    - ssh
+    - role: networking
+      vars:
+        allowed_tcp_ports:
+          - 80
+          - 443
+
+- hosts: microservice
+  become: yes
+  roles:
+    - ssh
+    - role: networking
+      vars:
+        allowed_tcp_ips:
+          - "{{ hostvars['load_balancer'].ansible_host }}"

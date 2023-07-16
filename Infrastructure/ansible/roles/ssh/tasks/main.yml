@@ -1,0 +1,17 @@
+---
+- name: Ensure a user with root privileges exists
+  user:
+    name: admin
+    group: sudo
+
+- name: Update sshd_config file
+  lineinfile:
+     dest: /etc/ssh/sshd_config
+     regexp: "{{ item.regexp }}"
+     line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^Port", line: "Port 1337" }
+    - { regexp: "^PasswordAuthentication", line: "PasswordAuthentication no" }
+    - { regexp: "^PermitRootLogin", line: "PermitRootLogin no" }
+  notify:
+    - restart ssh

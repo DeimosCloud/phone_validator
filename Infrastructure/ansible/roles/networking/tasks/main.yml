@@ -1,0 +1,13 @@
+---
+- name: Allow incoming traffic on specified TCP ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items: "{{ allowed_tcp_ports }}"
+
+- name: Allow incoming traffic from specified IP addresses
+  ufw:
+    rule: allow
+    src: "{{ item }}"
+  with_items: "{{ allowed_tcp_ips }}"

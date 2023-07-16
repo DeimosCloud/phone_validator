@@ -1,0 +1,5 @@
+[load_balancer]
+load_balancer ansible_host=192.0.2.1 ansible_port=1337
+
+[microservice]
+microservice ansible_host=192.0.2.2 ansible_port=1337

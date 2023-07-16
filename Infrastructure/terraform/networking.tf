@@ -14,7 +14,7 @@ module "vpc" {
   database_subnets = var.database_subnets
 
   enable_nat_gateway = true
-  enable_vpn_gateway = true
+  enable_vpn_gateway = false
 
   tags = local.common_labels
 }
@@ -83,18 +83,25 @@ module "lb_security_group" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-  ]
-
-  egress_with_cidr_blocks = [
-    {
-      description = "Deny all outgoing traffic"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
+     {
+      description = "Allow HTTPS"
+      rule        = "ssh-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-
   ]
+
+  # egress_with_cidr_blocks = [
+  #   {
+  #     description = "Deny all outgoing traffic"
+  #     from_port   = 0
+  #     to_port     = 0
+  #     protocol    = "-1"
+  #     cidr_blocks = "0.0.0.0/0"
+  #   },
+
+  # ]
+  egress_cidr_blocks = ["0.0.0.0/0"]
+  egress_rules       = ["all-all"]
 
   tags = local.common_labels
 }
