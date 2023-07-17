@@ -31,7 +31,7 @@ variable "vpc_name" {
 
 variable "private_subnets" {
   description = "The IP address range of the VPC's Private address range in CIDR notation"
-  type        = list(string) #set(string)
+  type        = list(string) 
   default     = []
 }
 

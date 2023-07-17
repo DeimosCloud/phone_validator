@@ -57,7 +57,7 @@ module "microservice" {
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install docker -y
+              sudo yum install docker iptables -y
               sudo service docker start
               sudo usermod -a -G docker ec2-user
               sudo chkconfig docker on

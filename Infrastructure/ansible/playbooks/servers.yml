@@ -7,6 +7,7 @@
         allowed_tcp_ports:
           - 80
           - 443
+          - 1337
 
 - hosts: microservice
   become: yes
@@ -16,3 +17,7 @@
       vars:
         allowed_tcp_ips:
           - "{{ hostvars['load_balancer'].ansible_host }}"
+        allowed_tcp_ports:
+          - 80
+          - 443
+          - 1337

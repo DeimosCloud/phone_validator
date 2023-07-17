@@ -1,13 +1,29 @@
 ---
+- name: Install iptables
+  yum:
+    name: iptables
+    state: present
+
 - name: Allow incoming traffic on specified TCP ports
-  ufw:
-    rule: allow
-    port: "{{ item }}"
-    proto: tcp
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
   with_items: "{{ allowed_tcp_ports }}"
 
+- name: Set default policy for INPUT chain to DROP
+  iptables:
+    chain: INPUT
+    policy: DROP
+
+
 - name: Allow incoming traffic from specified IP addresses
-  ufw:
-    rule: allow
-    src: "{{ item }}"
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    jump: ACCEPT
   with_items: "{{ allowed_tcp_ips }}"
+
+# - name: Save iptables rules
+#   command: service iptables save
