@@ -21,3 +21,14 @@
           - 80
           - 443
           - 1337
+
+- hosts: database
+  become: yes
+  roles:
+    - ssh
+    - role: networking
+      vars:
+        allowed_tcp_ips:
+          - "{{ hostvars['microservice'].ansible_host }}"
+        allowed_tcp_ports:
+          - 1337
