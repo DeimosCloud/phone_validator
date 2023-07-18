@@ -1,0 +1,66 @@
+name: Deploy Infrastructure
+
+
+on:
+  workflow_dispatch:
+  # pull_request:
+  #   types: [opened, synchronize]
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: eu-west-1
+  WORKING_DIRECTORY: Infrastructure
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli terraform
+
+      - name: Checkov Scan
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{env.WORKING_DIRECTORY}}
+          framework: terraform 
+          soft_fail: true
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Generate Terraform plan
+        run: terraform plan -out=tfplan
+        
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+        
+
+      - name: Post plan as comment on pull request
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('tfplan', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Apply Terraform configuration
+        run: terraform apply -auto-approve
+    
+      - name: Run Ansible playbooks
+        run: |
+          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" scp -o StrictHostKeyChecking=no -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
+          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
