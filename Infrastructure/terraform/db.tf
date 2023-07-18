@@ -69,15 +69,10 @@ module "postgres_db" {
               sudo yum install iptables python3-pip -y
               sudo dnf install postgresql15.x86_64 postgresql15-server -y
               sudo postgresql-setup --initdb
-              sudo service postgresql start
-              sudo chkconfig postgresql on
-
-              # Create a new PostgreSQL user and database
-              sudo -u postgres createuser jumia
-              sudo -u postgres createdb jumia_phone_validator
-              sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE jumia_phone_validator TO jumia;" 
-
-            
+              sudo systemctl start postgresql
+              sudo systemctl enable postgresql
+              
+              
               sudo sed -i 's/#Port 22/Port 1337/' /etc/ssh/sshd_config
               sudo service sshd restart
               EOF
