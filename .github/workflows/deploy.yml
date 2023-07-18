@@ -84,4 +84,6 @@ jobs:
           chmod 400 key.pem
           pwd
           scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@34.243.126.143:~
-          ssh -o StrictHostKeyChecking=no -i key.pem  ec2-user@34.243.126.143 "cd ansible && ansible-playbook -i hosts playbooks/servers.yml"
+          ssh -o StrictHostKeyChecking=no -i key.pem  ec2-user@34.243.126.143
+          whoami
+          cd ansible && ansible-playbook -i hosts playbooks/servers.yml
