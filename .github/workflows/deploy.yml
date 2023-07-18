@@ -76,5 +76,5 @@ jobs:
     
       - name: Run Ansible playbooks
         run: |
-          scp -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY_PATH }} -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY_PATH }} ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
+          scp -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY }} -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY }} ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
