@@ -3,7 +3,8 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: "jumia-test"
+    branches: 
+    - jumia-test
       # workflow_dispatch:
   # pull_request:
   #   types: [opened, synchronize]
