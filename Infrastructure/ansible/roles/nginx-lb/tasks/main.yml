@@ -1,9 +1,4 @@
-- name: Install Nginx
-  apt:
-    name: nginx
-    state: present
-    update_cache: yes
-
+---
 - name: Remove default Nginx configuration
   file:
     path: /etc/nginx/sites-enabled/default

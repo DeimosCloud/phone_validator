@@ -8,6 +8,7 @@
           - 80
           - 443
           - 1337
+    - nginx-lb
 
 - hosts: microservice
   become: yes
@@ -32,3 +33,7 @@
           - "{{ hostvars['microservice'].ansible_host }}"
         allowed_tcp_ports:
           - 1337
+    - role: postgres
+      vars:
+        postgres_user: jumia
+        postgres_db: jumia_phone_validator
