@@ -5,7 +5,7 @@ load_balancer ansible_host=10.10.4.29 ansible_port=1337
 microservice ansible_host=10.10.2.230 ansible_port=1337 
 
 [databasee]
-database ansible_host=10.10.8.33 ansible_port=1337 
+database ansible_host=10.10.8.109 ansible_port=1337 
 
 [backend]
 microservice
