@@ -13,7 +13,7 @@ env:
   WORKING_DIRECTORY: Infrastructure/terraform
 
 jobs:
-  plan:
+  infrastructure-deploy:
     runs-on: ubuntu-latest
     defaults:
       run: 
@@ -47,7 +47,6 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
         
@@ -74,5 +73,5 @@ jobs:
     
       - name: Run Ansible playbooks
         run: |
-          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" scp -o StrictHostKeyChecking=no -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
-          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
+          scp -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY_PATH }} -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.MASTER_NODE_SSH_KEY_PATH }} ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
