@@ -79,5 +79,5 @@ jobs:
           echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
           chmod 400 key.pem
           pwd
-          scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@ec2-user@34.243.126.143:~
+          scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@34.243.126.143:~
           ssh -o StrictHostKeyChecking=no -i key.pem  ec2-user@34.243.126.143:~ "cd ansible && ansible-playbook -i hosts -C playbooks/servers.yml"
