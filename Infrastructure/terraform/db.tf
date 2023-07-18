@@ -66,7 +66,7 @@ module "postgres_db" {
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install iptables -y
+              sudo yum install iptables python3-pip -y
               sudo dnf install postgresql15.x86_64 postgresql15-server -y
               sudo postgresql-setup --initdb
               sudo service postgresql start

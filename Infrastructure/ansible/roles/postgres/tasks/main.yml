@@ -2,20 +2,12 @@
 
 - name: Create PostgreSQL user
   become_user: postgres
-  postgresql_user:
-    name: "{{ postgres_user }}"
-    
+  command: "createuser {{ postgres_user }}"
 
 - name: Create PostgreSQL database
   become_user: postgres
-  postgresql_db:
-    name: "{{ postgres_db }}"
-    owner: "{{ postgres_user }}"
+  command: "createdb {{ postgres_db }}"
 
-- name: Grant read and write permissions to jumia on jumia_db
+- name: Grant privileges to user on database
   become_user: postgres
-  postgresql_privs:
-    db: "{{ postgres_db }}"
-    roles: "{{ postgres_user }}"
-    objs: ALL_IN_SCHEMA
-    privs: SELECT,INSERT,UPDATE,DELETE
+  command: "psql -c \"GRANT {{ postgres_privileges }} ON DATABASE {{ postgres_db }} TO {{ postgres_user }};\""
