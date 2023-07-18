@@ -15,6 +15,9 @@ env:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: ${{env.WORKING_DIRECTORY}}
 
     steps:
       - name: Check out repository
@@ -47,21 +50,21 @@ jobs:
         run: exit 1
         
 
-      - name: Post plan as comment on pull request
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const fs = require('fs');
-            const output = fs.readFileSync('tfplan', 'utf8');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            });
+      # - name: Post plan as comment on pull request
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       const fs = require('fs');
+      #       const output = fs.readFileSync('tfplan', 'utf8');
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: output
+      #       });
 
-      - name: Apply Terraform configuration
-        run: terraform apply -auto-approve
+      # - name: Apply Terraform configuration
+      #   run: terraform apply -auto-approve
     
       - name: Run Ansible playbooks
         run: |
