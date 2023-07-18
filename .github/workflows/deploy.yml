@@ -80,8 +80,13 @@ jobs:
     
       - name: Run Ansible playbooks
         run: |
+          echo "Writing key to file"
           echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
           chmod 400 key.pem
+          echo "Current working directory:"
           pwd
+          echo "Copying ansible directory"
           scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@34.243.126.143:~
-          ssh -o StrictHostKeyChecking=no -i key.pem  ec2-user@34.243.126.143 "cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
+          echo "Running ansible-playbook command"
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@34.243.126.143 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem && ssh-add ~/.ssh/loadbalancer.pem && ssh-add ~/.ssh/postgres.pem && cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
+      
