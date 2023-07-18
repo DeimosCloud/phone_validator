@@ -38,7 +38,7 @@ module "db_security_group" {
       description = "PostgreSQL access from within VPC"
       cidr_blocks = module.vpc.vpc_cidr_block
     },
-   
+
   ]
   egress_with_cidr_blocks = [
     {
@@ -120,7 +120,7 @@ module "ms_security_group" {
       rule        = "http-80-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-   
+
     {
       description = "Allow Port 1337"
       from_port   = 1337
@@ -174,7 +174,7 @@ module "ansible_master_security_group" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-     {
+    {
       description = "Allow HTTPS"
       rule        = "ssh-tcp"
       cidr_blocks = "0.0.0.0/0"

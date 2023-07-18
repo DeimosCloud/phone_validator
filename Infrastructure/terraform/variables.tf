@@ -31,7 +31,7 @@ variable "vpc_name" {
 
 variable "private_subnets" {
   description = "The IP address range of the VPC's Private address range in CIDR notation"
-  type        = list(string) 
+  type        = list(string)
   default     = []
 }
 
@@ -123,6 +123,24 @@ variable "db_allocated_storage" {
 
 variable "db_username" {
   description = "username for the database"
+  type        = string
+  default     = ""
+}
+
+variable "cluster_name" {
+  description = "name of kubernetes cluster"
+  type        = string
+  default     = ""
+}
+
+variable "backend_name" {
+  description = "name of backend image repository"
+  type        = string
+  default     = ""
+}
+
+variable "frontend_name" {
+  description = "name of frontend image repository"
   type        = string
   default     = ""
 }

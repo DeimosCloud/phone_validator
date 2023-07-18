@@ -6,3 +6,7 @@ microservice ansible_host=10.10.2.230 ansible_port=1337
 
 [databasee]
 database ansible_host=10.10.8.33 ansible_port=1337 
+
+[backend]
+microservice
+

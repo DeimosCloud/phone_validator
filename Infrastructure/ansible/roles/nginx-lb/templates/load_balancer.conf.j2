@@ -1,0 +1,17 @@
+# /etc/nginx/conf.d/load_balancer.conf
+
+http {
+  upstream backend {
+    {% for host in groups['backend'] %}
+    server {{ hostvars[host]['ansible_host'] }};
+    {% endfor %}
+  }
+
+  server {
+    listen 80;
+
+    location / {
+      proxy_pass http://backend;
+    }
+  }
+}
