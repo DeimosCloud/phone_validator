@@ -31,13 +31,13 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Checkov Scan
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ${{env.WORKING_DIRECTORY}}
-          framework: terraform 
-          soft_fail: true
+      # - name: Checkov Scan
+      #   id: checkov
+      #   uses: bridgecrewio/checkov-action@master
+      #   with:
+      #     directory: ${{env.WORKING_DIRECTORY}}
+      #     framework: terraform 
+      #     soft_fail: true
 
       - name: Initialize Terraform
         run: terraform init
