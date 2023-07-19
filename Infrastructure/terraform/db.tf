@@ -69,10 +69,12 @@ module "postgres_db" {
               sudo yum install iptables python3-pip -y
               sudo dnf install postgresql15.x86_64 postgresql15-server -y
               sudo postgresql-setup --initdb
+              pip install --upgrade pip
+              pip install psycopg2
               sudo systemctl start postgresql
               sudo systemctl enable postgresql
               
-              
+
               sudo sed -i 's/#Port 22/Port 1337/' /etc/ssh/sshd_config
               sudo service sshd restart
               EOF

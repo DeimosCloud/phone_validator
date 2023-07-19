@@ -1,9 +1,4 @@
 ---
-- name: Install iptables
-  yum:
-    name: iptables
-    state: present
-
 - name: Allow incoming traffic on specified TCP ports
   iptables:
     chain: INPUT
@@ -25,5 +20,4 @@
     jump: ACCEPT
   with_items: "{{ allowed_tcp_ips }}"
 
-# - name: Save iptables rules
-#   command: service iptables save
+
