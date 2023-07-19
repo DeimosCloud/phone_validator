@@ -11,7 +11,8 @@ env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     AWS_REGION: eu-west-1
-    ECR_REPOSITORY: validator-ftend
+    FE_ECR_REPOSITORY: validator-ftend
+    BE_ECR_REPOSITORY: validator-bkend
         # 992122884453.dkr.ecr.eu-west-1.amazonaws.com
     K8S_NAMESPACE: jumia-apps
     K8S_DEPLOYMENT_NAME: validator-ftend
@@ -47,8 +48,17 @@ jobs:
           context: validator-frontend
           file: ./validator-frontend/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.FE_ECR_REPOSITORY }}:${{ github.sha }}
           provenance: false
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+            context: validator-backend
+            file: ./validator-backend/Dockerfile
+            push: true
+            tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.BE_ECR_REPOSITORY }}:${{ github.sha }}
+            provenance: false
   
     #   - name: Install and configure kubectl
     #     run: |
