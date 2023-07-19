@@ -19,8 +19,8 @@
 - name: Create PostgreSQL database
   become_user: postgres
   command: "createdb {{ postgres_db }}"
-  when: not db_exists.stdout
+  when: db_exists.rc != 0
 
 - name: Grant privileges to user on database
   become_user: postgres
-  command: "psql -c \"GRANT {{ postgres_privileges }} ON DATABASE {{ postgres_db }} TO {{ postgres_user }};\""
+  command: "psql -d {{ postgres_db }} -c \"GRANT {{ postgres_privileges }} ON ALL TABLES IN SCHEMA public TO {{ postgres_user }};\""
