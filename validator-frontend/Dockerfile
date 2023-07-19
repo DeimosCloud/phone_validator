@@ -1,18 +1,9 @@
-# FROM node:alpine3.12
-# WORKDIR /validator-frontend
-# COPY package*.json ./
-# RUN npm install
-# RUN npm ci --omit=dev
-# COPY . .
-# RUN npm i serve -g
-# CMD ["serve", "-s", "-l", "8081"]
-
 FROM node:16.3.0-alpine AS build
 
 WORKDIR /validator-frontend
 COPY . .
 
-RUN npm install 
+RUN apt-get npm install 
 RUN npm run build
 
 FROM nginx:1.23
