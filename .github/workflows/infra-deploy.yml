@@ -83,8 +83,6 @@ jobs:
           echo "Writing key to file"
           echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
           chmod 400 key.pem
-          echo "Current working directory:"
-          pwd
           echo "Copying ansible directory"
           scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@54.229.248.28:~
           echo "Running ansible-playbook command"
