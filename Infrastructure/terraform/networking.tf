@@ -161,8 +161,14 @@ module "ms_security_group" {
       rule                     = "http-80-tcp",
       source_security_group_id = module.lb_security_group.security_group_id
     },
+    {
+      from_port                = 32009 # NodePort for loadbalancer
+      to_port                  = 32009
+      protocol                 = "tcp"
+      source_security_group_id = module.lb_security_group.security_group_id
+    },
   ]
-  number_of_computed_ingress_with_source_security_group_id = 2
+  number_of_computed_ingress_with_source_security_group_id = 3
 
   tags = local.common_labels
 }

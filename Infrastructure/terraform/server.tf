@@ -41,7 +41,7 @@ module "load_balancer" {
 
 module "microservice" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-   version = ">= 4.66.0"
+  version = ">= 4.66.0"
 
 
 
