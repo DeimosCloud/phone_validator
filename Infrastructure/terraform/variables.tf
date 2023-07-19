@@ -45,6 +45,7 @@ variable "public_subnets" {
 variable "db_name" {
   description = "Postgres database name"
   type        = string
+  default     = ""
 }
 
 variable "database_subnets" {

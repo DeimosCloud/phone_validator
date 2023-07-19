@@ -15,7 +15,7 @@ env:
     K8S_DEPLOYMENT_NAME: validator-ftend
   
 jobs:
-    deploy:
+  application-deploy:
       runs-on: ubuntu-latest
   
       steps:
