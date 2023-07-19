@@ -9,7 +9,7 @@
   become_user: postgres
   shell: "psql -lqt | cut -d \\| -f 1 | grep -qw {{ postgres_db }}"
   register: db_exists
-  ignore_errors: true
+  ignore_errors: yes
 
 - name: Create PostgreSQL user
   become_user: postgres
