@@ -13,7 +13,33 @@ module "eks" {
   eks_managed_node_group_defaults = {
     disk_size = 50
   }
+  eks_managed_node_groups = {
+    node_2 = {
+      desired_size = 1
+      min_size     = 1
+      max_size     = 2
 
+      labels = {
+        role = "general"
+      }
+
+      instance_types = ["t3.small"]
+      capacity_type  = "ON_DEMAND"
+    }
+
+    node_3 = {
+      desired_size = 1
+      min_size     = 1
+      max_size     = 2
+
+      labels = {
+        role = "spot"
+      }
+
+      instance_types = ["t3.small"]
+      capacity_type  = "ON_DEMAND"
+    }
+  }
 
 }
 
