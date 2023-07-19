@@ -86,7 +86,7 @@ jobs:
           echo "Current working directory:"
           pwd
           echo "Copying ansible directory"
-          scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@34.243.126.143:~
+          scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@54.229.248.28:~
           echo "Running ansible-playbook command"
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@34.243.126.143 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem && ssh-add ~/.ssh/loadbalancer.pem && ssh-add ~/.ssh/postgres.pem && cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem && ssh-add ~/.ssh/loadbalancer.pem && ssh-add ~/.ssh/postgres.pem && cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
       
