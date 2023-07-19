@@ -22,7 +22,7 @@
           - 80
           - 443
           - 1337
-
+   
 - hosts: database
   become: yes
   roles:

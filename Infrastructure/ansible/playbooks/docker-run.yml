@@ -1,0 +1,14 @@
+
+- hosts: microservice
+  become: yes
+  roles:
+    - role: docker-run
+      vars:
+        region: eu-west-1
+        account_id: 992122884453
+        repository_name: "{{ item }}"
+        tag: ${{ github.sha }}
+      loop:
+        - validator-bkend
+        - validator-frontend
+

@@ -67,7 +67,7 @@ jobs:
               echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
               chmod 400 key.pem
               echo "Running ansible-playbook command"
-              ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem && ssh-add ~/.ssh/loadbalancer.pem && ssh-add ~/.ssh/postgres.pem && cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
+              ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem  && cd ansible && ansible-playbook -i hosts -v playbooks/docker-run.yml"
   
       - name: Install and configure kubectl
         run: |

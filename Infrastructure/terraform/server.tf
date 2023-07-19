@@ -41,7 +41,13 @@ module "load_balancer" {
 
 module "microservice" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
+   version = ">= 4.66.0"
+
+
+
+
+
+
 
   name = var.microservice
 
@@ -52,7 +58,15 @@ module "microservice" {
   vpc_security_group_ids = [module.ms_security_group.security_group_id]
   subnet_id              = module.vpc.private_subnets[1]
 
-  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+  create_iam_instance_profile = true
+  iam_role_description        = "Allow ECR access"
+
+  iam_role_policies = {
+    AmazonEC2ContainerRegistryFullAccess = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+    AmazonEC2ContainerServiceforEC2Role  = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  }
+
+  # iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -127,6 +141,8 @@ resource "aws_iam_role" "ssm_role" {
   })
 }
 
+
+
 resource "aws_iam_role_policy_attachment" "ssm_role_attachment" {
   role       = aws_iam_role.ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
@@ -136,3 +152,37 @@ resource "aws_iam_instance_profile" "ssm_profile" {
   name = "ssm_profile"
   role = aws_iam_role.ssm_role.name
 }
+
+
+# resource "aws_iam_role" "ecr_role" {
+#   name = "ecr_role"
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole"
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "ec2.amazonaws.com"
+#         }
+#       }
+#     ]
+#   })
+# }
+
+
+
+
+# resource "aws_iam_role_policy_attachment" "ecr_role_attachment" {
+#   role       = aws_iam_role.ecr_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+# }
+
+# resource "aws_iam_instance_profile" "ssm_profile" {
+#   name = "ecr_profile"
+#   role = aws_iam_role.ssm_role.name
+# }
+
+# AmazonEC2ContainerRegistryFullAccess = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+#     AmazonEC2ContainerServiceforEC2Role  = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"

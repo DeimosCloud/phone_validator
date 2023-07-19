@@ -14,10 +14,10 @@ module "eks" {
     disk_size = 50
   }
   eks_managed_node_groups = {
-    node_2 = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 2
+    Jumia = {
+      desired_size = 3
+      min_size     = 3
+      max_size     = 5
 
       labels = {
         role = "general"
@@ -27,18 +27,6 @@ module "eks" {
       capacity_type  = "ON_DEMAND"
     }
 
-    node_3 = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 2
-
-      labels = {
-        role = "spot"
-      }
-
-      instance_types = ["t3.small"]
-      capacity_type  = "ON_DEMAND"
-    }
   }
 
 }
