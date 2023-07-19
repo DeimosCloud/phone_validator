@@ -2,7 +2,10 @@ name: Deploy Infrastructure
 
 
 on:
-  workflow_dispatch:
+  # push:
+  #   branches: 
+  #      - Jumia-test
+      workflow_dispatch:
   # pull_request:
   #   types: [opened, synchronize]
 
@@ -13,7 +16,7 @@ env:
   WORKING_DIRECTORY: Infrastructure/terraform
 
 jobs:
-  plan:
+  infrastructure-deploy:
     runs-on: ubuntu-latest
     defaults:
       run: 
@@ -45,9 +48,12 @@ jobs:
         id: init
         run: terraform init
 
+      - name: Terraform format
+        id: fmt
+        run: terraform fmt -check
+
       - name: Terraform plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
         
@@ -69,10 +75,18 @@ jobs:
       #         body: output
       #       });
 
-      # - name: Apply Terraform configuration
-      #   run: terraform apply -auto-approve -input=false
+      - name: Apply Terraform configuration
+        run: terraform apply -auto-approve -input=false
     
       - name: Run Ansible playbooks
         run: |
-          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" scp -o StrictHostKeyChecking=no -r ansible ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }}:~
-          sshpass -p "${{ secrets.MASTER_NODE_SSH_KEY }}" ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.MASTER_NODE_PUBLIC_IP }} "ansible-playbook ansible/playbooks/site.yaml"
+          echo "Writing key to file"
+          echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
+          chmod 400 key.pem
+          echo "Current working directory:"
+          pwd
+          echo "Copying ansible directory"
+          scp -o StrictHostKeyChecking=no -i key.pem -r ../ansible ec2-user@54.229.248.28:~
+          echo "Running ansible-playbook command"
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem && ssh-add ~/.ssh/loadbalancer.pem && ssh-add ~/.ssh/postgres.pem && cd ansible && ansible-playbook -i hosts -v playbooks/servers.yml"
+      

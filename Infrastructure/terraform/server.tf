@@ -21,7 +21,7 @@ module "load_balancer" {
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install nginx -y
+              sudo yum install iptables nginx -y
               sudo service nginx start
               sudo chkconfig nginx on
 
@@ -97,6 +97,7 @@ module "ansible_master" {
               sudo yum update -y
               sudo yum install python3-pip -y
               python3 -m pip install 
+              sudo yum install ansible -y
               EOF
 
   tags = merge(

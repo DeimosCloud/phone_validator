@@ -50,6 +50,17 @@ module "db_security_group" {
     },
 
   ]
+  computed_ingress_with_source_security_group_id = [
+    {
+      rule                     = "https-443-tcp",
+      source_security_group_id = module.ms_security_group.security_group_id
+    },
+    {
+      rule                     = "http-80-tcp",
+      source_security_group_id = module.ms_security_group.security_group_id
+    },
+  ]
+  number_of_computed_ingress_with_source_security_group_id = 2
 
 
   tags = local.common_labels
@@ -140,6 +151,18 @@ module "ms_security_group" {
     },
 
   ]
+
+  computed_ingress_with_source_security_group_id = [
+    {
+      rule                     = "https-443-tcp",
+      source_security_group_id = module.lb_security_group.security_group_id
+    },
+    {
+      rule                     = "http-80-tcp",
+      source_security_group_id = module.lb_security_group.security_group_id
+    },
+  ]
+  number_of_computed_ingress_with_source_security_group_id = 2
 
   tags = local.common_labels
 }
