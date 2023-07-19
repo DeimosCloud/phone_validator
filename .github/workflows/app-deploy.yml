@@ -61,14 +61,14 @@ jobs:
             tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.BE_ECR_REPOSITORY }}:${{ github.sha }}
             provenance: false
 
-      - name: Run Docker container on Microservice server
-        run: |
-              echo "Writing key to file"
-              echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
-              chmod 400 key.pem
-              echo "Running ansible-playbook command"
-              scp -o StrictHostKeyChecking=no -i key.pem -r ./Infrastructure/ansible ec2-user@54.229.248.28:~
-              ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem  && cd ansible && ansible-playbook -i hosts -v playbooks/docker-run.yml"
+      # - name: Run Docker container on Microservice server
+      #   run: |
+      #         echo "Writing key to file"
+      #         echo "${{ secrets.MASTER_NODE_SSH_KEY }}" > key.pem
+      #         chmod 400 key.pem
+      #         echo "Running ansible-playbook command"
+      #         scp -o StrictHostKeyChecking=no -i key.pem -r ./Infrastructure/ansible ec2-user@54.229.248.28:~
+      #         ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.229.248.28 "eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/microservice.pem  && cd ansible && ansible-playbook -i hosts -v playbooks/docker-run.yml"
   
       - name: Install and configure kubectl
         run: |
