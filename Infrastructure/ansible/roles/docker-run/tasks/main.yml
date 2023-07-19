@@ -1,23 +1,11 @@
 ---
-- name: Allow incoming traffic on specified TCP ports
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: "{{ item }}"
-    jump: ACCEPT
-  with_items: "{{ allowed_tcp_ports }}"
+- name: Login to ECR
+  command: aws ecr get-login-password --region {{ region }} | docker login --username AWS --password-stdin {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com
 
-- name: Set default policy for INPUT chain to DROP
-  iptables:
-    chain: INPUT
-    policy: DROP
+- name: Pull Docker image from ECR
+  command: docker pull {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ repository_name }}:{{ tag }}
 
-
-- name: Allow incoming traffic from specified IP addresses
-  iptables:
-    chain: INPUT
-    source: "{{ item }}"
-    jump: ACCEPT
-  with_items: "{{ allowed_tcp_ips }}"
+- name: Run Docker container
+  command: docker run -d --name {{ container_name }} {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ repository_name }}:{{ tag }}
 
 
