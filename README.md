@@ -22,6 +22,6 @@ For configuration management, Ansible played a crucial role in creating users, d
 To automate the deployment process, I set up two GitHub Action pipelines. The first action, infra-deploy handles infrastructure deployment, including the Terraform setup. In this action, Ansible files are copied to the Ansible master node through scp and then ssh into the master node before executing the playbook. Since the other servers all ser have private IP addresses and cannot be reached publically within the same VPC, Ansible commands must be executed from there.
 
 The second GitHub Action pipeline is responsible for building Docker images for both the frontend and backend applications and pushing them to an ECR repository created through Terraform. Subsequently, Ansible takes over and deploys the images to the microservice server. Finally the containers in ecr is deployed to kubernetes with 3 nodes in different availability zones.
-
+The frontend application can be reach on kubernetes through a node svc via the loadbalancer public ip http://52.211.167.97/ 
 ---
 
