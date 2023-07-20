@@ -6,9 +6,8 @@
       vars:
         region: eu-west-1
         account_id: 992122884453
-        repository_name: "{{ item }}"
+        repository_names:
+          - validator-bkend
+          - validator-frontend
         tag: ${{ github.sha }}
-      loop:
-        - validator-bkend
-        - validator-frontend
 
