@@ -30,6 +30,12 @@
         allowed_tcp_ips:
           - "{{ hostvars['microservice'].ansible_host }}"
         allowed_tcp_ports:
+          - 80
+          - 8080
+          - 5432
+    - role: networking   
+      vars:
+        allowed_tcp_ports:
           - 1337
     - role: postgres
       vars:
