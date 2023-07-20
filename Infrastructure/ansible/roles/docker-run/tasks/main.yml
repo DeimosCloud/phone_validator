@@ -2,10 +2,13 @@
 - name: Login to ECR
   shell: aws ecr get-login-password --region {{ region }} | docker login --username AWS --password-stdin {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com
 
-- name: Pull Docker image from ECR
-  command: docker pull {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ item }}:{{ tag }}
-  
-- name: Run Docker container
-  shell: docker run -d --name {{ container_name }} {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ repository_name }}:{{ tag }}
+- name: Pull and run Docker images from ECR
+  block:
+    - name: Pull Docker image from ECR
+      shell: docker pull {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ item }}:{{ tag }}
+
+    - name: Run Docker container
+      shell: docker run -d --name {{ item }} {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ item }}:{{ tag }}
+  loop: "{{ repository_names }}"
 
 
