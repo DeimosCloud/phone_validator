@@ -22,6 +22,7 @@ module "load_balancer" {
   iam_role_policies = {
     AmazonEKSClusterPolicy = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
     AmazonEKSServicePolicy = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+    EKSFullAccess          = aws_iam_policy.full_eks_policy.arn
   }
 
   user_data = <<-EOF
@@ -64,6 +65,7 @@ module "microservice" {
   iam_role_policies = {
     AmazonEC2ContainerRegistryFullAccess = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
     AmazonEC2ContainerServiceforEC2Role  = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+
   }
 
   # iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
@@ -154,35 +156,48 @@ resource "aws_iam_instance_profile" "ssm_profile" {
 }
 
 
-# resource "aws_iam_role" "ecr_role" {
-#   name = "ecr_role"
+resource "aws_iam_role" "full_eks_role" {
+  name = "full_eks_role"
 
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = "sts:AssumeRole"
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "ec2.amazonaws.com"
-#         }
-#       }
-#     ]
-#   })
-# }
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
 
+resource "aws_iam_policy" "full_eks_policy" {
+  name        = "full_eks_policy"
+  description = "Full EKS policy"
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "eks:*"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
 
+resource "aws_iam_role_policy_attachment" "full_eks_role_attachment" {
+  role       = aws_iam_role.full_eks_role.name
+  policy_arn = aws_iam_policy.full_eks_policy.arn
+}
 
-# resource "aws_iam_role_policy_attachment" "ecr_role_attachment" {
-#   role       = aws_iam_role.ecr_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
-# }
+resource "aws_iam_instance_profile" "full_eks_profile" {
+  name = "load_balancer"
+  role = aws_iam_role.full_eks_role.name
+}
 
-# resource "aws_iam_instance_profile" "ssm_profile" {
-#   name = "ecr_profile"
-#   role = aws_iam_role.ssm_role.name
-# }
-
-# AmazonEC2ContainerRegistryFullAccess = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
-#     AmazonEC2ContainerServiceforEC2Role  = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"

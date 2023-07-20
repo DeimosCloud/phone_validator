@@ -16,12 +16,10 @@
     - ssh
     - role: networking
       vars:
-        allowed_tcp_ips:
-          - "{{ hostvars['load_balancer'].ansible_host }}"
         allowed_tcp_ports:
           - 80
           - 443
-          - 1337
+        
    
 - hosts: database
   become: yes

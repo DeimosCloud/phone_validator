@@ -110,6 +110,7 @@ module "lb_security_group" {
     },
 
   ]
+  
   tags = local.common_labels
 }
 

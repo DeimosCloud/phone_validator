@@ -7,11 +7,6 @@
     jump: ACCEPT
   with_items: "{{ allowed_tcp_ports }}"
 
-- name: Set default policy for INPUT chain to DROP
-  iptables:
-    chain: INPUT
-    policy: DROP
-
 
 - name: Allow incoming traffic from specified IP addresses
   iptables:
@@ -19,5 +14,16 @@
     source: "{{ item }}"
     jump: ACCEPT
   with_items: "{{ allowed_tcp_ips }}"
+
+- name: Allow outgoing traffic
+  iptables:
+    chain: INPUT
+    match: conntrack
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+
+- name: Set default policy for INPUT chain to DROP
+  iptables:
+    chain: INPUT
 
 
