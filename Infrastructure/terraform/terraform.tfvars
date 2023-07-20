@@ -17,3 +17,10 @@ db_username          = "jumia"
 cluster_name         = "jumia-cluster"
 backend_name         = "validator-bkend"
 frontend_name        = "validator-ftend"
+
+eks_subnet      = "10.10.20.0/22"
+opps_subnet      = "10.210.12.0/23"
+opps_az          = "af-south-1b"
+apps_az          = "af-south-1c"
+eks_subnet_name = "eks_subnet"
+

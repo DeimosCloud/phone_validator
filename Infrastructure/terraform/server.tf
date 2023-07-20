@@ -4,7 +4,7 @@
 
 module "load_balancer" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
+  version = ">= 4.66.0"
 
   name = var.load_balancer
 
@@ -16,7 +16,13 @@ module "load_balancer" {
   subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
 
-  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+  # iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+  create_iam_instance_profile = true
+  iam_role_description        = "Allow EKS access"
+  iam_role_policies = {
+    AmazonEKSClusterPolicy = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+    AmazonEKSServicePolicy = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+  }
 
   user_data = <<-EOF
               #!/bin/bash
@@ -33,7 +39,7 @@ module "load_balancer" {
   tags = merge(
     local.common_labels,
     {
-      Name = "load_balancer"
+      Name = "load_balancer",
     }
   )
 }
@@ -42,12 +48,6 @@ module "load_balancer" {
 module "microservice" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = ">= 4.66.0"
-
-
-
-
-
-
 
   name = var.microservice
 

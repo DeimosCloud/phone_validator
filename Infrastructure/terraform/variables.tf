@@ -145,3 +145,32 @@ variable "frontend_name" {
   type        = string
   default     = ""
 }
+
+
+variable "eks_az" {
+  description = "The Availabilty zones for eks Subnet "
+  type        = string
+  default     = ""
+}
+
+
+
+variable "apps_subnet_name" {
+  description = "The IP address range of the VPC in CIDR notation"
+  type        = string
+  default     = ""
+}
+
+variable "eks_subnet_name" {
+  description = "The IP address range of the VPC in CIDR notation"
+  type        = string
+  default     = ""
+}
+
+
+variable "eks_subnet" {
+  description = "The IP address range of the VPC's Private address range in CIDR notation"
+  type        = string
+  default     = ""
+}
+

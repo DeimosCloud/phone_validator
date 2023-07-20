@@ -16,6 +16,10 @@ module "vpc" {
   enable_nat_gateway = true
   enable_vpn_gateway = false
 
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+  }
+
   tags = local.common_labels
 }
 
@@ -162,8 +166,8 @@ module "ms_security_group" {
       source_security_group_id = module.lb_security_group.security_group_id
     },
     {
-      from_port                = 32009 # NodePort for loadbalancer
-      to_port                  = 32009
+      from_port                = 32088 # NodePort for loadbalancer
+      to_port                  = 32088
       protocol                 = "tcp"
       source_security_group_id = module.lb_security_group.security_group_id
     },
