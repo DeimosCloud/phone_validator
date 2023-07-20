@@ -50,7 +50,7 @@ locals {
 
 module "postgres_db" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
+  version = ">= 4.66.0"
 
   name = var.db_name
 
@@ -61,7 +61,15 @@ module "postgres_db" {
   vpc_security_group_ids = [module.ms_security_group.security_group_id]
   subnet_id              = module.vpc.database_subnets[0]
 
-  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+  # iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+
+  create_iam_instance_profile = true
+  iam_role_description        = "Allow EKS access"
+  iam_role_policies = {
+    AmazonEKSClusterPolicy = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+    AmazonEKSServicePolicy = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+    EKSFullAccess          = aws_iam_policy.full_eks_policy.arn
+  }
 
   user_data = <<-EOF
               #!/bin/bash

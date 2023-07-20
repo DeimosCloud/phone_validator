@@ -32,7 +32,7 @@ module "eks" {
 
   }
 
-   # Extend cluster security group rules
+  # Extend cluster security group rules
   cluster_security_group_additional_rules = {
     egress_nodes_ephemeral_ports_tcp = {
       description                = "To node 1025-65535"

@@ -8,6 +8,6 @@
         account_id: 992122884453
         repository_names:
           - validator-bkend
-          - validator-frontend
+          - validator-ftend
         tag: ${{ github.sha }}
 
