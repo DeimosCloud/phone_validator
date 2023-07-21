@@ -105,6 +105,13 @@ module "lb_security_group" {
       cidr_blocks = "0.0.0.0/0"
     },
     {
+      description = "Allow Port 8080"
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
       description = "Allow Port 1337"
       from_port   = 1337
       to_port     = 1337
@@ -149,7 +156,13 @@ module "ms_security_group" {
       rule        = "http-80-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-
+     {
+      description = "Allow Port 8080" # Backend port
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
     {
       description = "Allow Port 1337"
       from_port   = 1337
