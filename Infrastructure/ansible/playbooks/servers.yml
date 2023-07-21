@@ -48,4 +48,5 @@
       vars:
         postgres_user: jumia
         postgres_db: jumia_phone_validator
+        postgres_password: jumia
         postgres_privileges: "ALL PRIVILEGES"

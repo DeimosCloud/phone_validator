@@ -49,6 +49,13 @@ module "db_security_group" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
+     {
+      description = "Allow Port 1337"
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
 
   ]
   egress_with_cidr_blocks = [
@@ -199,7 +206,7 @@ module "ms_security_group" {
       source_security_group_id = module.lb_security_group.security_group_id
     },
      {
-      from_port                = 31185 # NodePort for backend app 
+      from_port                = 31185 # NodePort for frontend app 
       to_port                  = 31185
       protocol                 = "tcp"
       source_security_group_id = module.lb_security_group.security_group_id
