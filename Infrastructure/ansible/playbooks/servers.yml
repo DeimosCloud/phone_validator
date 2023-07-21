@@ -41,4 +41,4 @@
       vars:
         postgres_user: jumia
         postgres_db: jumia_phone_validator
-        postgres_privileges: "SELECT, INSERT, UPDATE, DELETE"
+        postgres_privileges: "ALL PRIVILEGES"

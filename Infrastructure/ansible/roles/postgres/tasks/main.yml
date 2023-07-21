@@ -24,3 +24,12 @@
 - name: Grant privileges to user on database
   become_user: postgres
   command: "psql -d {{ postgres_db }} -c \"GRANT {{ postgres_privileges }} ON ALL TABLES IN SCHEMA public TO {{ postgres_user }};\""
+
+- name: Copy sample.sql to remote host
+  template:
+    src: sample.sql
+    dest: /tmp/sample.sql
+
+- name: Create table in PostgreSQL database
+  become_user: postgres
+  command: "psql -d {{ postgres_db }} -f /tmp/sample.sql"

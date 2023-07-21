@@ -78,7 +78,7 @@ jobs:
           sudo mv kubectl /usr/local/bin/
           kubectl version --client
   
-      - name: Deploy Frontend to Kubernetes
+      - name: Deploy Frontend and Backend to Kubernetes
         run: |
            echo "Deploying Frontend to Kubernetes"
            aws eks update-kubeconfig --name jumia-cluster
