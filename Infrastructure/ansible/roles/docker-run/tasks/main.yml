@@ -6,7 +6,11 @@
 - name: Pull Docker image from ECR
   shell: docker pull {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ item }}:{{ tag }}
   loop: "{{ repository_names }}"
-
+  
+- name: Remove existing Docker container
+  shell: docker rm -f {{ item }} || true
+  loop: "{{ repository_names }}"
+  
 - name: Run Docker container
   shell: docker run -d --name {{ item }} {{ account_id }}.dkr.ecr.{{ region }}.amazonaws.com/{{ item }}:{{ tag }}
   loop: "{{ repository_names }}"
