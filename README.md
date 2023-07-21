@@ -23,5 +23,6 @@ To automate the deployment process, I set up two GitHub Action pipelines. The fi
 
 The second GitHub Action pipeline is responsible for building Docker images for both the frontend and backend applications and pushing them to an ECR repository created through Terraform. Subsequently, Ansible takes over and deploys the images to the microservice server. Finally the containers in ecr is deployed to kubernetes with 3 nodes in different availability zones.
 The frontend application can be reach on kubernetes through a node svc via the loadbalancer public ip http://52.211.167.97/ 
----
+
+
 
