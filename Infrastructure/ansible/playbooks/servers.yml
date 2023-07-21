@@ -31,7 +31,11 @@
     - ssh
     - role: networking
       vars:
-        allowed_tcp_ips: "{{ groups['backend'] }}"
+        allowed_tcp_ips: 
+          - "{{ hostvars['microservice'].ansible_host }}"
+          - "{{ hostvars['node1'].ansible_host }}"
+          - "{{ hostvars['node2'].ansible_host }}"
+          - "{{ hostvars['node3'].ansible_host }}"
         allowed_tcp_ports:
           - 80
           - 8080

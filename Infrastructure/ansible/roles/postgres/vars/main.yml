@@ -1,3 +1,4 @@
 postgres_user: []
 postgres_db: []
 postgres_privileges: []
+postgres_password : []

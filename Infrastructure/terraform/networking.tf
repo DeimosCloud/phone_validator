@@ -193,13 +193,19 @@ module "ms_security_group" {
       source_security_group_id = module.lb_security_group.security_group_id
     },
     {
-      from_port                = 32088 # NodePort for loadbalancer
+      from_port                = 32088 # NodePort for frontend app 
       to_port                  = 32088
       protocol                 = "tcp"
       source_security_group_id = module.lb_security_group.security_group_id
     },
+     {
+      from_port                = 31185 # NodePort for backend app 
+      to_port                  = 31185
+      protocol                 = "tcp"
+      source_security_group_id = module.lb_security_group.security_group_id
+    },
   ]
-  number_of_computed_ingress_with_source_security_group_id = 3
+  number_of_computed_ingress_with_source_security_group_id = 4
 
   tags = local.common_labels
 }

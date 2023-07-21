@@ -13,7 +13,7 @@
 
 - name: Create PostgreSQL user
   become_user: postgres
-  command: "createuser {{ postgres_user }}"
+  command: "psql -c \"CREATE USER {{ postgres_user }} WITH PASSWORD '{{ postgres_password }}'\""
   when: not user_exists.stdout
 
 - name: Create PostgreSQL database

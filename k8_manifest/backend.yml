@@ -26,6 +26,32 @@ spec:
           image: 992122884453.dkr.ecr.eu-west-1.amazonaws.com/validator-bkend:latest
           ports:
             - containerPort: 8080
+          env: 
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: backend-config
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: backend-config
+                key: DB_PORT
+          - name: DB_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: backend-config
+                key: DB_USERNAME
+          - name: DB_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: backend-config
+                key: DB_PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: backend-config
+                key: DB_NAME
 
 ---
 
@@ -42,3 +68,20 @@ spec:
       port: 8080
       targetPort: 8080
   type: LoadBalancer
+
+
+---
+#create configmap manifest
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: validator
+data:
+  DB_HOST: "3.249.11.245"
+  DB_PORT: "5432"
+  DB_USERNAME: "jumia"
+  DB_PASSWORD: "jumia"
+  DB_NAME: "jumia_phone_validator"
+
+

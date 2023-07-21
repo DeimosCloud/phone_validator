@@ -1,16 +1,31 @@
 # /etc/nginx/conf.d/load_balancer.conf
 
-  upstream backend {
+  upstream frontend_app {
     {% for host in groups['backend'] %}
     server {{ hostvars[host]['ansible_host'] }}:32088;
     {% endfor %}
   }
 
+
+ upstream backend_app {
+  {% for host in groups['backend'] %}
+  server {{ hostvars[host]['ansible_host'] }}:31185;
+  {% endfor %}
+}
+
   server {
     listen 80;
 
     location / {
-      proxy_pass http://backend;
+      proxy_pass http://frontend_app;
     }
   }
+
+  server {
+  listen 8080;
+
+  location / {
+    proxy_pass http://backend_app;
+  }
+}
 
