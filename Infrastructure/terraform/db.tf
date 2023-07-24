@@ -58,9 +58,9 @@ module "postgres_db" {
   instance_type          = var.linux_instance_type
   key_name               = "postgres"
   monitoring             = true
-  vpc_security_group_ids = [module.ms_security_group.security_group_id]
-  # subnet_id              = module.vpc.private_subnets[0]
-  subnet_id              = module.vpc.database_subnets[0]
+  vpc_security_group_ids = [module.db_security_group.security_group_id]
+  subnet_id              = module.vpc.private_subnets[0]
+  # subnet_id              = module.vpc.database_subnets[0]
 
   # iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
 

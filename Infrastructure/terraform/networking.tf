@@ -49,13 +49,13 @@ module "db_security_group" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-     {
-      description = "Allow Port 1337"
-      from_port   = 5432
-      to_port     = 5432
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
+    #  {
+    #   description = "Allow Port 5432"
+    #   from_port   = 5432
+    #   to_port     = 5432
+    #   protocol    = "tcp"
+    #   cidr_blocks = "0.0.0.0/0"
+    # },
 
   ]
   egress_with_cidr_blocks = [
@@ -81,10 +81,10 @@ module "db_security_group" {
       from_port                = 32088 # NodePort for loadbalancer
       to_port                  = 32088
       protocol                 = "tcp"
-      source_security_group_id = module.lb_security_group.security_group_id
+      source_security_group_id = module.ms_security_group.security_group_id
     },
   ]
-  number_of_computed_ingress_with_source_security_group_id = 2
+  number_of_computed_ingress_with_source_security_group_id = 3
 
 
   tags = local.common_labels
