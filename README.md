@@ -12,17 +12,39 @@ API application was made by Java v8 using Spring boot framework v2.4.5 and UI wa
 ---
 
 ### Jumia_phone_validator
+
+
+## AWS Infrastructure
+- VPC with subnets
+- Security groups
+- EC2 instance as Ansible master node, that acts as a jumpbox for other servers
+- EC2 instance for postgresql server
+- EC2 instance for Microservice server
+- EC2 instance for Loadbalancer server with nginx installed
+- ECR repositories for front end and backend application
+- EKS cluster with a managed node group having nodes that spans across 3 availability zones.
+
+## Overview of the deployment
+- Terrfaorm was used to deploy the infrastructure, and the various applications were deployed using terraform userdata, to remove that dependency from Ansible.
+- The Ansible master node has a public ip address where only permitted users can connect to it.
+- The microservice and database servers are in a private subnet.
+- The loadbalancer server is in a public subnet with elastic ip enabled.
+- ECR repositories for the applications were created using terraform
+- Github Action was used for automating the deployment process.
+- The applications were deployed to kubernetes with 3 replicas across 3 nodes in 3 availability zones
+- Ansible was used for the configuration management, applying iptables firewall rules, changing default ssh ports etc
+- Checkov was added to github pipeline to check for code misconfigurations.
+
+## Recommendations
+- use AWS system manager for login to remove the need for management of ssh keys
+- use AWS RDS database for postgresql deployment
+
+
+The application can be reached on kubernetes through a node svc via the loadbalancer public ip http://52.211.167.97/ 
+
+
  
-Terraform was used to create the entire infrastructure, including VPC, security groups, and EC2 instances for the servers. I also utilized official AWS modules to set up EKS with private and public subnets. To reduce dependencies on Ansible, I made use of user data on ECS instances to install applications on the EC2 instances. For instance, I installed Ansible on the master node which has a pubic IP address, PostgreSQL on a dedicated EC2 server, Nginx on the load balancer, and Docker on the microservice. Additionally, I changed the default SSH port.
 
-To ensure a production-ready environment, only the load balancer resides in a public subnet accessible from the internet. The microservice is located behind the load balancer, with incoming traffic reaching both the microservice and a PostgreSQL database situated further back.
-
-For configuration management, Ansible played a crucial role in creating users, databases, and privileges on the PostgreSQL server, modifying SSH permissions, and disabling root login on all servers. I also used Ansible to set up iptables, configuring a firewall that allows only specific traffic on ports 80, 443, and 1337. I organized these tasks into Ansible roles, and a playbook named "server.yaml" was created to orchestrate them. Additionally, I used another playbook called "docker-run" to deploy containers into the microservice.
-
-To automate the deployment process, I set up two GitHub Action pipelines. The first action, infra-deploy handles infrastructure deployment, including the Terraform setup. In this action, Ansible files are copied to the Ansible master node through scp and then ssh into the master node before executing the playbook. Since the other servers all ser have private IP addresses and cannot be reached publically within the same VPC, Ansible commands must be executed from there.
-
-The second GitHub Action pipeline is responsible for building Docker images for both the frontend and backend applications and pushing them to an ECR repository created through Terraform. Subsequently, Ansible takes over and deploys the images to the microservice server. Finally the containers in ecr is deployed to kubernetes with 3 nodes in different availability zones.
-The frontend application can be reach on kubernetes through a node svc via the loadbalancer public ip http://52.211.167.97/ 
 
 
 

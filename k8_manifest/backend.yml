@@ -78,7 +78,7 @@ metadata:
   name: backend-config
   namespace: validator
 data:
-  DB_HOST: "3.249.11.245"
+  DB_HOST: "10.10.1.32"
   DB_PORT: "5432"
   DB_USERNAME: "jumia"
   DB_PASSWORD: "jumia"
